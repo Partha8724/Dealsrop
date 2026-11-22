@@ -1,0 +1,66 @@
+name: Update prices and deploy
+
+on:
+  schedule:
+    - cron: "17 * * * *"   # every hour
+  push:
+    branches: [main]
+  workflow_dispatch:          # "Run workflow" button in the Actions tab
+
+permissions:
+  contents: write   # to save the price history back to the repo
+  pages: write
+  id-token: write
+
+concurrency:
+  group: update-and-deploy
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch latest prices
+        run: node scripts/fetch.js
+        env:
+          FK_AFFILIATE_ID: ${{ secrets.FK_AFFILIATE_ID }}
+          FK_AFFILIATE_TOKEN: ${{ secrets.FK_AFFILIATE_TOKEN }}
+          TP_TOKEN: ${{ secrets.TP_TOKEN }}
+          TP_MARKER: ${{ secrets.TP_MARKER }}
+
+      - name: Save price history
+        run: |
+          git config user.name "dealdrop-bot"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/prices.json
+          git diff --cached --quiet || git commit -m "Update prices $(date -u +'%Y-%m-%d %H:%M') UTC"
+          git pull --rebase --autostash || true
+          git push || echo "Push skipped"
+
+      - id: pages
+        uses: actions/configure-pages@v5
+
+      - name: Build site
+        run: node scripts/build.js
+        env:
+          SITE_URL: ${{ steps.pages.outputs.base_url }}
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

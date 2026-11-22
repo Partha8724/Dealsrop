@@ -1,0 +1,12 @@
+{
+  "name": "DealDrop India",
+  "tagline": "Today's biggest price drops, checked every few hours",
+  "description": "Track price drops on top products and find the cheapest flight fares in India. Prices are checked automatically every few hours with full price history.",
+  "url": "https://partha8724.github.io/Dealsrop",
+  "author": "DealDrop India",
+  "language": "en-IN",
+  "currency": "INR",
+  "googleSiteVerification": "",
+  "historyDays": 90,
+  "minDropPercent": 3
+}

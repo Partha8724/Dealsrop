@@ -1,0 +1,17 @@
+{
+  "_help": "Add search words for products to track and flight routes (IATA airport codes). Each query tracks its top results.",
+  "productsPerQuery": 8,
+  "categories": [
+    { "slug": "earbuds", "name": "Wireless Earbuds", "queries": ["wireless earbuds"] },
+    { "slug": "smartwatches", "name": "Smartwatches", "queries": ["smartwatch"] },
+    { "slug": "mixer-grinders", "name": "Mixer Grinders", "queries": ["mixer grinder"] },
+    { "slug": "backpacks", "name": "Backpacks", "queries": ["laptop backpack"] },
+    { "slug": "power-banks", "name": "Power Banks", "queries": ["power bank 20000mah"] },
+    { "slug": "shoes", "name": "Running Shoes", "queries": ["running shoes men"] }
+  ],
+  "flightRoutes": [
+    ["DEL", "BOM"], ["BOM", "DEL"], ["DEL", "BLR"], ["BLR", "DEL"],
+    ["BOM", "BLR"], ["DEL", "GOI"], ["HYD", "DEL"], ["MAA", "DEL"],
+    ["CCU", "DEL"], ["BLR", "GOI"]
+  ]
+}
